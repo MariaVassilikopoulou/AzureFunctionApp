@@ -10,23 +10,23 @@ namespace TheFunctionAppAzure.Db
 {
     public class MyDbContext : DbContext
     {
-        public MyDbContext(DbContextOptions<MyDbContext>options):base(options)
+        public MyDbContext(DbContextOptions<MyDbContext> options) : base(options)
         {
-            
+
         }
-        public DbSet<Product> products {get; set; }
+        public DbSet<Product> products { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
             if (!options.IsConfigured)
             {
-                options.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=FunctionAppDatabase;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
+                options.UseSqlServer("TheConnectionString");
+
             }
-                      
+
         }
 
+
     }
-
-
 }

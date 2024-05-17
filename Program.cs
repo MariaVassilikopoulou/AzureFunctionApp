@@ -8,14 +8,20 @@ using TheFunctionAppAzure.Interfaces;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication()
-    .ConfigureServices(services =>
+    .ConfigureServices((context,services) =>
     {
+        var configuration = context.Configuration;
+        string? connectionString = configuration["TheConnectionString"];
+
+        services.AddDbContext<MyDbContext>(options =>
+        {
+            options.UseSqlServer(connectionString);
+        });
+  
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
-
-        services.AddDbContext<MyDbContext>(options => options.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=FunctionAppDatabase;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False"));
         services.AddScoped<IProductRepository, ProductRepository>();
     })
-    .Build();
+         .Build();
 
 host.Run();
